@@ -8,10 +8,11 @@ const Car = (props) => {
 
     const addCarPhoto = (event) => {
         console.log(event.target.files[0]);
-            const formData = new FormData;
-            formData.append('photo', event.target.files[0]);
+        const formData = new FormData;
+        const file = event.target.files[0];
+        formData.append('photo', file);
 
-            dispatch(carActions.addPhotoById({id, formData}));
+        dispatch(carActions.addPhotoById({id, formData, file}));
     };
 
     return (

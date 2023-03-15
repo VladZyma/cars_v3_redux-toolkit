@@ -51,11 +51,11 @@ const deleteCarById = createAsyncThunk(
 
 const addPhotoById = createAsyncThunk(
     'carSlice/addCarPhotoById',
-    async ({id, formData}, {rejectWithValue}) => {
+    async ({id, formData, file}, {rejectWithValue}) => {
         try {
             const {data} = await carService.addCarPhotoById(id, formData);
             console.log('DATA:', data);
-            return data;
+            return {data, file};
         } catch (e) {
             return rejectWithValue(e.response?.message);
         }
@@ -140,8 +140,8 @@ const carSlice = createSlice({
             })
 
             .addCase(addPhotoById.fulfilled, (state, action) => {
-                const carToAddPhoto = state.cars.items.find(car => car.id === action.payload.id);
-                Object.assign(carToAddPhoto, {...action.payload, photo: URL.createObjectURL(action.payload.photo)});
+                const carToAddPhoto = state.cars.items.find(car => car.id === action.payload.data.id);
+                Object.assign(carToAddPhoto, {...action.payload, photo: URL.createObjectURL(action.payload.file)});
 
                 state.loading = false;
                 state.error = null;
